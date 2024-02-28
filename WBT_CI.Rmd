@@ -1,0 +1,54 @@
+---
+title: "Implementation and Comparison of Confidence Intervals"
+author: "Yashvi Malviya, Kevin Norris, Mia Monintja"
+date: "12-11-2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introduction
+
+This document presents the implementation and comparison of confidence intervals as proposed by Wall, Boen, and Tweedie (2001). Specifically, we explore their methodology for cases where \(n > 1\) and \(n > 2\).
+
+# Methodology
+
+```{r}
+
+```
+
+```{r}
+calculate_wbt_ci <- function(x, a = 0, level = 0.95) {
+  # if x is a single observation or a vector of observations
+  if (length(x) == 1) {
+    # For sample size 1
+    tau <- dnorm(0)
+
+    zeta <- (2 * tau / level) + 1
+    ci_lower <- (mean(x) - a) - zeta * abs(mean(x) - a)
+    ci_upper <- (mean(x) - a) + zeta * abs(mean(x) - a)
+  }
+  else if (length(x) == 2) {
+
+    # For sample size 2, calculating the mean and standard deviation
+      mean_x <- mean(x)
+      sd_x <- sd(x)
+
+    # t-distribution for sample size 2
+    t_quantile <- qt((1 + level) / 2, df = 1)
+
+    ci_lower <- mean_x - t_quantile * sd_x / sqrt(2)
+    ci_upper <- mean_x + t_quantile * sd_x / sqrt(2)
+  } else {
+    stop("Sample size must be either 1 or 2.")
+  }
+
+  # Return result
+  return(new("ci_result", confidence_level = level, ci_lower = ci_lower, ci_upper = ci_upper))
+}
+```
+
+
